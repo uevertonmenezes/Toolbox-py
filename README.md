@@ -3,4 +3,5 @@ Caixa de ferramentas com scripts e funções Python úteis para diversas necessi
 
 ## Atuais funções:
 Calculadora de horas extras;  
-Calculadora de férias.  
+Calculadora de férias;  
+Calculadora de horas.
