@@ -1,2 +1,4 @@
 calculadoras_trabalhistas/.idea/
 .idea
+calculadoras_trabalhistas/__pycache__/
+calculadoras_trabalhistas/tests/__pycache__/
