@@ -1,33 +1,26 @@
-def calcular_horarios():
-    print('**Calculadora de Horários (h:m)**')
-
-    horario1 = input('Digite o primeiro horário (ex: 07:58)')
-    horario2 = input('Digite o segundo horário (ex: 11:02)')
-
+def calcular_intervalo(horario_inicial: str, horario_final: str) -> int:
     try:
-        h1, m1 = map(int, horario1.split(':'))
-        h2, m2 = map(int, horario2.split(':'))
-
+        h1, m1 = map(int, horario_inicial.split(":"))
+        h2, m2 = map(int, horario_final.split(":"))
     except ValueError:
-        print('\nErro: Formato inválido. Utilize ":" ao preencher o seu horário.')
-        return
+        raise ValueError("Formato inválido. Use HH:MM")
 
-    minutos_inicial = (h1 * 60) + m1
-    minutos_final = (h2 * 60) + m2
+    inicio =h1 * 60 +m1
+    final = h2 * 60 + m2
 
-    minutos_diferença = minutos_final - minutos_inicial
+    if final < inicio:
+        raise ValueError("Horário final menor que o inicial")
 
-    if minutos_diferença < 0:
-        print('\nErro: O horário final é menor que o horário inicial.')
+    return final - inicio
 
-    horas_finais = minutos_diferença // 60
 
-    minutos_finais = minutos_diferença % 60
+def calcular_total(intervalos: list[tuple[str, str]]) -> str:
+    total_minutos = 0
 
-    resultado_formatado = f"{horas_finais:02d}:{minutos_finais:02d}"
+    for inicio, final in intervalos:
+        total_minutos += calcular_intervalo(inicio, final)
 
-    print("-" * 30)
-    print(f"O resultado é: {resultado_formatado}")
-    print("-" * 30)
+    horas = total_minutos // 60
+    minutos = total_minutos % 60
 
-calcular_horarios()
+    return f"{horas:02d}:{minutos:02d}"
