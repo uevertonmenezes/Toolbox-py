@@ -1,4 +1,18 @@
-calculadoras_trabalhistas/.idea/
-.idea
-calculadoras_trabalhistas/__pycache__/
-calculadoras_trabalhistas/tests/__pycache__/
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDEs
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

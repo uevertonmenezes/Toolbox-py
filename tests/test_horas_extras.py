@@ -1,5 +1,5 @@
 import pytest
-from calculadora_horasExtras import calcular_horas_extras
+from calculadoras_trabalhistas.horas_extras import calcular_horas_extras
 
 def test_calculo_basico_horas_extras():
     resultado = calcular_horas_extras(
