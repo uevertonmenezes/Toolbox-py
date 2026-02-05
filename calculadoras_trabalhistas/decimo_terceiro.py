@@ -1,22 +1,43 @@
-print("**Calculadora de Décimo Terceiro**")
+from enum import Enum
 
-salario_bruto = float(input("Qual o seu salário bruto? (Sem os descontos)\n"))
-meses_trabalhados = int(input("Quantos meses você trabalhou esse ano?\n"))
-parcela_decimo = float(input(
-    "Qual parcela deseja simular?\n"
-        "0- Única\n"
-        "1- Primeira Parcela\n"
-        "2- Segunda Parcela\n"))
 
-salario_mes = salario_bruto / 12
+class ParcelaDecimo(str, Enum):
+    unica = "unica"
+    primeira = "primeira"
+    segunda = "segunda"
 
-if parcela_decimo == 0:
-    decimo_terceiro = (salario_mes * meses_trabalhados) * (91 / 100) #alíquota de teste (9%), logo mais será adicionado tabela real de alíquotas
 
-elif parcela_decimo == 1:
-    decimo_terceiro = (salario_mes * meses_trabalhados) / 2
+def calcular_decimo_terceiro(
+        salario_bruto: float,
+        meses_trabalhados: int,
+        parcela: ParcelaDecimo
+) -> dict:
 
-else:
-    decimo_terceiro = (salario_mes * meses_trabalhados) / 2 * (91 / 100)
 
-print(f'o valor do seu décimo terceiro é de: R${decimo_terceiro:.2f}')
+    PARCELAS_VALIDAS = {"unica", "primeira", "segunda"}
+
+    if parcela not in PARCELAS_VALIDAS:
+        raise ValueError("Parcela inválida. Use: 'unica', 'primeira' ou 'segunda'")
+
+    if salario_bruto <= 0:
+        raise ValueError("Salário deve ser maior que zero")
+
+    if not 0 <= meses_trabalhados <= 12:
+        raise ValueError("Meses trabalhados deve estar entre 0 e 12")
+
+
+    salario_mes = salario_bruto / 12
+    base_calculo = salario_mes * meses_trabalhados
+
+    if parcela == ParcelaDecimo.unica:
+        decimo_terceiro = base_calculo * 0.91 #alíquota de teste
+
+    elif parcela == ParcelaDecimo.primeira:
+        decimo_terceiro = base_calculo / 2
+
+    elif parcela == ParcelaDecimo.segunda:
+        decimo_terceiro = (base_calculo / 2) * 0.91
+
+    return {
+        "valor_decimo_terceiro": round(decimo_terceiro, 2)
+    }
