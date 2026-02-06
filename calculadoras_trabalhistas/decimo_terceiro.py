@@ -1,3 +1,4 @@
+from descontos.inss import calcular_inss
 from enum import Enum
 
 
@@ -5,7 +6,6 @@ class ParcelaDecimo(str, Enum):
     unica = "unica"
     primeira = "primeira"
     segunda = "segunda"
-
 
 def calcular_decimo_terceiro(
         salario_bruto: float,
@@ -30,13 +30,16 @@ def calcular_decimo_terceiro(
     base_calculo = salario_mes * meses_trabalhados
 
     if parcela == ParcelaDecimo.unica:
-        decimo_terceiro = base_calculo * 0.91 #alíquota de teste
+        desconto_inss = calcular_inss(base_calculo)
+        decimo_terceiro = base_calculo - desconto_inss
 
     elif parcela == ParcelaDecimo.primeira:
         decimo_terceiro = base_calculo / 2
 
     elif parcela == ParcelaDecimo.segunda:
-        decimo_terceiro = (base_calculo / 2) * 0.91
+        metade = base_calculo / 2
+        desconto_inss = calcular_inss(metade)
+        decimo_terceiro = metade - desconto_inss
 
     return {
         "valor_decimo_terceiro": round(decimo_terceiro, 2)
