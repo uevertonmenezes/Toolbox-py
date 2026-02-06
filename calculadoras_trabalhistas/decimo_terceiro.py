@@ -1,11 +1,21 @@
 from descontos.inss import calcular_inss
+from descontos.irpf import calcular_irpf
 from enum import Enum
+
+
+def calcular_descontos_legais(valor_bruto: float) -> tuple[float, float]:
+    desconto_inss = calcular_inss(valor_bruto)
+    base_irpf = valor_bruto - desconto_inss
+    desconto_irpf = calcular_irpf(base_irpf)
+
+    return desconto_inss, desconto_irpf
 
 
 class ParcelaDecimo(str, Enum):
     unica = "unica"
     primeira = "primeira"
     segunda = "segunda"
+
 
 def calcular_decimo_terceiro(
         salario_bruto: float,
@@ -14,33 +24,39 @@ def calcular_decimo_terceiro(
 ) -> dict:
 
 
-    PARCELAS_VALIDAS = {"unica", "primeira", "segunda"}
+    if not isinstance(parcela, ParcelaDecimo):
+        raise ValueError("Parcela inválida")
 
-    if parcela not in PARCELAS_VALIDAS:
-        raise ValueError("Parcela inválida. Use: 'unica', 'primeira' ou 'segunda'")
-
-    if salario_bruto <= 0:
+    elif salario_bruto <= 0:
         raise ValueError("Salário deve ser maior que zero")
 
-    if not 0 <= meses_trabalhados <= 12:
+    elif not 0 <= meses_trabalhados <= 12:
         raise ValueError("Meses trabalhados deve estar entre 0 e 12")
-
 
     salario_mes = salario_bruto / 12
     base_calculo = salario_mes * meses_trabalhados
 
-    if parcela == ParcelaDecimo.unica:
-        desconto_inss = calcular_inss(base_calculo)
-        decimo_terceiro = base_calculo - desconto_inss
+    valor_bruto = 0.0
+    desconto_inss = 0.0
+    desconto_irpf = 0.0
 
-    elif parcela == ParcelaDecimo.primeira:
-        decimo_terceiro = base_calculo / 2
+    if parcela == ParcelaDecimo.primeira:
+        valor_bruto = base_calculo / 2
 
     elif parcela == ParcelaDecimo.segunda:
-        metade = base_calculo / 2
-        desconto_inss = calcular_inss(metade)
-        decimo_terceiro = metade - desconto_inss
+        valor_bruto = base_calculo / 2
+        desconto_inss, desconto_irpf = calcular_descontos_legais(valor_bruto)
+
+    elif parcela == ParcelaDecimo.unica:
+        valor_bruto = base_calculo
+        desconto_inss, desconto_irpf = calcular_descontos_legais(valor_bruto)
+
+    valor_liquido = valor_bruto - desconto_inss - desconto_irpf
 
     return {
-        "valor_decimo_terceiro": round(decimo_terceiro, 2)
+        "parcela": parcela.value,
+        "valor_bruto": round(valor_bruto, 2),
+        "desconto_inss": round(desconto_inss, 2),
+        "desconto_irpf": round(desconto_irpf, 2),
+        "valor_decimo_terceiro": round(valor_liquido, 2)
     }
