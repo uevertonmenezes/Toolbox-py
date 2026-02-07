@@ -5,8 +5,10 @@ def calcular_irpf(base: float) -> float:
         return 0.0
 
     for faixa in TABELA_IRPF_2026:
-        if base <= faixa["salario_ate"]:
-            return (base * faixa["aliquota"]) - faixa["parcela_deduzir"]
+        if base <= faixa["base_ate"]:
+            imposto = (base * faixa["aliquota"]) - faixa["parcela_deduzir"]
+            return max(imposto, 0.0)
 
     ultima = TABELA_IRPF_2026[-1]
-    return (base * ultima["aliquota"]) - ultima["parcela_deduzir"]
+    imposto = (base * ultima["aliquota"]) - ultima["parcela_deduzir"]
+    return max(imposto, 0.0)

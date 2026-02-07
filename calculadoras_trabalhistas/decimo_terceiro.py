@@ -1,12 +1,24 @@
 from descontos.inss import calcular_inss
 from descontos.irpf import calcular_irpf
+from aliquotas.irpf_2026 import DEDUCAO_DEPENDENTE
 from enum import Enum
 
 
-def calcular_descontos_legais(valor_bruto: float) -> tuple[float, float]:
+def calcular_descontos_legais(
+        valor_bruto: float,
+        dependentes: int = 0
+) -> tuple[float, float]:
     desconto_inss = calcular_inss(valor_bruto)
     base_irpf = valor_bruto - desconto_inss
-    desconto_irpf = calcular_irpf(base_irpf)
+    base_irpf -= dependentes * DEDUCAO_DEPENDENTE
+
+    if base_irpf < 0:
+        base_irpf = 0
+
+    if base_irpf <= 5000:
+        desconto_irpf = 0.0
+    else:
+        desconto_irpf = calcular_irpf(base_irpf)
 
     return desconto_inss, desconto_irpf
 
@@ -20,7 +32,8 @@ class ParcelaDecimo(str, Enum):
 def calcular_decimo_terceiro(
         salario_bruto: float,
         meses_trabalhados: int,
-        parcela: ParcelaDecimo
+        parcela: ParcelaDecimo,
+        dependentes: int = 0
 ) -> dict:
 
 
@@ -45,11 +58,15 @@ def calcular_decimo_terceiro(
 
     elif parcela == ParcelaDecimo.segunda:
         valor_bruto = base_calculo / 2
-        desconto_inss, desconto_irpf = calcular_descontos_legais(valor_bruto)
+        desconto_inss, desconto_irpf = calcular_descontos_legais(
+            valor_bruto, dependentes
+        )
 
     elif parcela == ParcelaDecimo.unica:
         valor_bruto = base_calculo
-        desconto_inss, desconto_irpf = calcular_descontos_legais(valor_bruto)
+        desconto_inss, desconto_irpf = calcular_descontos_legais(
+            valor_bruto, dependentes
+        )
 
     valor_liquido = valor_bruto - desconto_inss - desconto_irpf
 

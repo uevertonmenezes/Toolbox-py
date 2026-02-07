@@ -29,3 +29,5 @@ TABELA_IRPF_2026 = [
         "parcela_deduzir": 908.73
     },
 ]
+
+DEDUCAO_DEPENDENTE = 189.59
