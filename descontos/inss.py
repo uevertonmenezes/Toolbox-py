@@ -9,4 +9,5 @@ def calcular_inss(base: float) -> float:
             return (base * faixa["aliquota"]) - faixa["parcela_deduzir"]
 
     ultima = TABELA_INSS_2026[-1]
-    return (base * ultima["aliquota"]) - ultima["parcela_deduzir"]
+    teto = ultima["salario_ate"]
+    return (teto * ultima["aliquota"]) - ultima["parcela_deduzir"]
