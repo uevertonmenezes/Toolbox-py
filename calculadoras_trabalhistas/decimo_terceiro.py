@@ -1,10 +1,20 @@
 from descontos.inss import calcular_inss
 from descontos.irpf import calcular_irpf
 from aliquotas.irpf_2026 import DEDUCAO_DEPENDENTE
+
 from enum import Enum
-from typing import Tuple
+from typing import Tuple, TypedDict
 
 
+class ResultadoDecimoTerceiro(TypedDict):
+    parcela: str
+    valor_bruto: float
+    desconto_inss: float
+    desconto_irpf: float
+    valor_decimo_terceiro: float
+
+
+#Será separado para reuso em demais códigos
 def calcular_descontos_legais(
         valor_bruto: float,
         dependentes: int = 0
@@ -12,7 +22,7 @@ def calcular_descontos_legais(
     desconto_inss = calcular_inss(valor_bruto)
     base_irpf = valor_bruto - desconto_inss
     base_irpf -= dependentes * DEDUCAO_DEPENDENTE
-    base_irpf = max(base_irpf, 0)
+    base_irpf = max(base_irpf, 0.0)
 
     desconto_irpf = calcular_irpf(base_irpf)
 
@@ -30,8 +40,7 @@ def calcular_decimo_terceiro(
         meses_trabalhados: int,
         parcela: ParcelaDecimo,
         dependentes: int = 0
-) -> dict:
-
+) -> ResultadoDecimoTerceiro:
 
     if not isinstance(parcela, ParcelaDecimo):
         raise ValueError("Parcela inválida")
@@ -66,8 +75,9 @@ def calcular_decimo_terceiro(
 
     valor_liquido = valor_bruto - desconto_inss - desconto_irpf
 
+
     return {
-        "parcela": parcela.value,
+        "parcela": str(parcela.value),
         "valor_bruto": round(valor_bruto, 2),
         "desconto_inss": round(desconto_inss, 2),
         "desconto_irpf": round(desconto_irpf, 2),

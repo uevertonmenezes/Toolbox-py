@@ -1,5 +1,5 @@
 import pytest
-from calculadoras_trabalhistas.decimo_terceiro import calcular_decimo_terceiro, ParcelaDecimo, calcular_descontos_legais
+from calculadoras_trabalhistas.decimo_terceiro import calcular_decimo_terceiro, ParcelaDecimo
 
 
 def test_primeira_parcela_sem_desconto():
@@ -76,6 +76,16 @@ def test_dependentes_nao_afetam_irpf_quando_isento():
     )
     assert sem_dependentes["desconto_irpf"] == 0.0
     assert com_dependentes["desconto_irpf"] == 0.0
+
+
+def test_decimo_terceiro_zero_meses():
+    resultado = calcular_decimo_terceiro(
+        salario_bruto=4000.00,
+        meses_trabalhados=0,
+        parcela=ParcelaDecimo.unica
+    )
+
+    assert resultado["valor_decimo_terceiro"] == 0.0
 
 
 def test_parcela_invalida():
