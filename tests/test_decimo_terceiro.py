@@ -74,6 +74,7 @@ def test_dependentes_nao_afetam_irpf_quando_isento():
         parcela=ParcelaDecimo.unica,
         dependentes=2
     )
+
     assert sem_dependentes["desconto_irpf"] == 0.0
     assert com_dependentes["desconto_irpf"] == 0.0
 

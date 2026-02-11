@@ -1,4 +1,3 @@
-import pytest
 from calculadoras_trabalhistas.decimo_terceiro import calcular_descontos_legais
 
 

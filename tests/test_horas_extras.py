@@ -1,6 +1,7 @@
 import pytest
 from calculadoras_trabalhistas.horas_extras import calcular_horas_extras
 
+
 def test_calculo_basico_horas_extras():
     resultado = calcular_horas_extras(
         salario_bruto=1621.0,
@@ -16,6 +17,7 @@ def test_calculo_basico_horas_extras():
     assert resultado["total_hora_noturna"] == 13.26
     assert resultado["total_geral"] == 39.05
 
+
 def test_formato_hora_invalido():
     with pytest.raises(ValueError):
         calcular_horas_extras(
@@ -25,6 +27,7 @@ def test_formato_hora_invalido():
             hora_extra100="01:00",
             hora_noturna="01:00"
         )
+
 
 def test_sem_horas_extras():
     resultado = calcular_horas_extras(
@@ -36,6 +39,7 @@ def test_sem_horas_extras():
     )
 
     assert resultado["total_geral"] == 0
+
 
 def test_estrutura_retorno():
     resultado = calcular_horas_extras(

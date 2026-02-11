@@ -1,6 +1,7 @@
 import pytest
 from calculadoras_trabalhistas.horas import calcular_total
 
+
 @pytest.mark.parametrize(
     "intervalos, esperado",
     [
@@ -41,6 +42,8 @@ from calculadoras_trabalhistas.horas import calcular_total
         ),
     ]
 )
+
+
 def test_calcular_total(intervalos, esperado):
     assert calcular_total(intervalos) == esperado
 
