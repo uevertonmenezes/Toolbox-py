@@ -76,12 +76,10 @@ def calcular_ferias(
         abono_pecuniario,
     )
 
-
     adiantamento_decimo = 0.0
 
     if adiantar_decimo == AdiantarDecimo.sim:
         adiantamento_decimo = salario_bruto / 2
-
 
     valor_bruto_ferias = (
         verbas["valor_proporcional"]
@@ -92,12 +90,10 @@ def calcular_ferias(
 
     base_para_descontos = valor_bruto_ferias
 
-
     desconto_inss, desconto_irpf = calcular_descontos_legais(
         base_para_descontos,
         dependentes
     )
-
 
     valor_liquido = (
         valor_bruto_ferias
