@@ -69,6 +69,25 @@ def calcular_ferias(
     dependentes: int = 0,
 ) -> ResultadoFerias:
 
+    if salario_bruto <= 0:
+        raise ValueError("Salário bruto deve ser maior que zero.")
+
+    if media_horas_extras < 0:
+        raise ValueError("Média de horas extras não pode ser negativa.")
+
+    if not 1 <= dias_ferias <= 30:
+        raise ValueError("Dias de férias devem estar entre 1 e 30.")
+
+    if dependentes < 0:
+        raise ValueError("Quantidade de dependentes não pode ser negativa.")
+
+    if not isinstance(abono_pecuniario, AbonoPecuniario):
+        raise TypeError("abono_pecuniario deve ser do tipo AbonoPecuniario.")
+
+    if not isinstance(adiantar_decimo, AdiantarDecimo):
+        raise TypeError("adiantar_decimo deve ser do tipo AdiantarDecimo.")
+
+
     verbas = calcular_verbas_ferias(
         salario_bruto,
         media_horas_extras,
