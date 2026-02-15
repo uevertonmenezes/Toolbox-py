@@ -58,6 +58,7 @@ def calcular_decimo_terceiro(
 
     valor_liquido = valor_bruto - desconto_inss - desconto_irpf
 
+
     return {
         "parcela": str(parcela.value),
         "valor_bruto": round(valor_bruto, 2),
